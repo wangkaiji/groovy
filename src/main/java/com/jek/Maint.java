@@ -7,19 +7,23 @@ import groovy.util.ScriptException;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 public class Maint {
     public static void main(String args[])throws IOException,ResourceException,ScriptException{
-        String[] roots = new String[]{"/home/kaiji/idea-workspace/groovy/src/main/groovy"};
+
+
+        String groovyRelPath = "groovy";
+        String groovyScriptName = "XmlParser.groovy";
+        String fileName = "test.xml";
+
+        String classpath = Maint.class.getClassLoader()
+                .getResource("").getPath();
+        String[] roots = new String[]{classpath+groovyRelPath+File.separator};
         GroovyScriptEngine groovyScriptEngine = new GroovyScriptEngine(roots);
-
-        URL url = Maint.class.getClassLoader().getResource("test.xml");
-        File xmlFile = new File(url.getPath());
-
+        File xmlFile = new File(classpath+fileName);
         Binding binding = new Binding();
         binding.setVariable("xmlFile",xmlFile);
-        Object output = groovyScriptEngine.run("/home/kaiji/idea-workspace/groovy/src/main/groovy/com/jek/XmlParser.groovy",binding);
+        Object output = groovyScriptEngine.run(classpath+groovyRelPath+File.separator+groovyScriptName,binding);
         System.out.println((String)output);
 
     }
